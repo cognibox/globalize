@@ -94,7 +94,11 @@ module Globalize
       def parse_translated_conditions(opts)
         if opts.is_a?(Hash) && respond_to?(:translated_attribute_names) && (keys = opts.symbolize_keys.keys & translated_attribute_names).present?
           opts = opts.dup
-          keys.each { |key| opts[translated_column_name(key)] = opts.delete(key) || opts.delete(key.to_s) }
+  	  keys.each do |key| 
+  	    value = opts.delete(key) || opts.delete(key.to_s)
+  	    opts[translation_class.table_name] ||= {}
+  	    opts[translation_class.table_name][key] = value 
+   	  end
           opts
         end
       end
