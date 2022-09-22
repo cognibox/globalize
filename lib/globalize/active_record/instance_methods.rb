@@ -53,21 +53,10 @@ module Globalize
         end
       end
 
-      def read_attribute(attr_name, options = {}, &block)
-        name = if self.class.attribute_alias?(attr_name)
-                 self.class.attribute_alias(attr_name).to_s
-               else
-                 attr_name.to_s
-               end
+      def read_attribute(name, options = nil, &block)
+        return super(name, &block) unless translated?(name) && options&.send(:[], :translated) != false && (value = globalize.fetch(options&.send(:[], :locale) || Globalize.locale, name))
 
-        name = self.class.primary_key if name == "id".freeze && self.class.primary_key
-
-        _read_attribute(name, options, &block)
-      end
-
-      def _read_attribute(attr_name, options = {}, &block)
-        translated_value = read_translated_attribute(attr_name, options, &block)
-        translated_value.nil? ? super(attr_name, &block) : translated_value
+        value
       end
 
       def attribute_names
