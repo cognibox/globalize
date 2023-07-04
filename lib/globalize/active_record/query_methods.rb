@@ -4,7 +4,7 @@ module Globalize
 
       class WhereChain < ::ActiveRecord::QueryMethods::WhereChain
         def not(opts, *rest)
-          if parsed = @scope.parse_translated_conditions(opts)
+          if parsed = @scope.clone.parse_translated_conditions(opts)
             @scope.join_translations.where.not(parsed, *rest)
           else
             super
