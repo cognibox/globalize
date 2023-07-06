@@ -59,7 +59,7 @@ module Globalize
           klass.belongs_to :globalized_model,
             class_name: self.name,
             foreign_key: translation_options[:foreign_key],
-            inverse_of: :translations,
+            # inverse_of: :translations,
             touch: translation_options.fetch(:touch, false)
           klass
         end
