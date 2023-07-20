@@ -79,11 +79,7 @@ module Globalize
 
       def fetch_attribute(locale, name)
         translation = record.translation_for(locale, false)
-        if translation
-          translation.send(name)
-        else
-          record.class.translation_class.new.send(name)
-        end
+        return translation && translation.send(name)
       end
 
       def set_metadata(object, metadata)
