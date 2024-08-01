@@ -182,7 +182,18 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
     describe 'for translated columns' do
       it 'returns only selected attributes' do
         @rel = Post.send(method, :title)
-        assert_match(/post_translations.title/, @rel.to_sql)
+
+        if Globalize.rails_61?
+          # Rails 6.1 and later quote the translated column name
+          case Globalize::Test::Database.driver
+          when 'mysql'
+            assert_match(/`post_translations`.`title`/, @rel.to_sql)
+          else
+            assert_match(/"post_translations"."title"/, @rel.to_sql)
+          end
+        else
+          assert_match(/post_translations.title/, @rel.to_sql)
+        end
       end
 
       it 'generates a working query' do
@@ -224,11 +235,21 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
       it 'returns only selected attributes' do
         @rel = Post.send(method, :title, :id)
 
-        case Globalize::Test::Database.driver
-        when 'mysql'
-          assert_match(/post_translations.title, `posts`.`id`/, @rel.to_sql)
+        if Globalize.rails_61?
+          # Rails 6.1 and later quote the translated column name
+          case Globalize::Test::Database.driver
+          when 'mysql'
+            assert_match(/`post_translations`.`title`, `posts`.`id`/, @rel.to_sql)
+          else
+            assert_match(/"post_translations"."title", "posts"."id"/, @rel.to_sql)
+          end
         else
-          assert_match(/post_translations.title, "posts"."id"/, @rel.to_sql)
+          case Globalize::Test::Database.driver
+          when 'mysql'
+            assert_match(/post_translations.title, `posts`.`id`/, @rel.to_sql)
+          else
+            assert_match(/post_translations.title, "posts"."id"/, @rel.to_sql)
+          end
         end
       end
 
@@ -329,9 +350,9 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
         Post.create(:title => 'title'),
         Post.create(:title => 'title') ]
       Globalize.with_locale(:ja) do
-        @posts[0].update_attributes(:title => 'タイトル1')
-        @posts[1].update_attributes(:title => 'タイトル2')
-        @posts[2].update_attributes(:title => 'タイトル3')
+        @posts[0].update(:title => 'タイトル1')
+        @posts[1].update(:title => 'タイトル2')
+        @posts[2].update(:title => 'タイトル3')
       end
     end
 
@@ -401,9 +422,9 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
         Post.create(:id => 2, :title => 'title2'),
         Post.create(:id => 3, :title => 'title3') ]
       Globalize.with_locale(:ja) do
-        @posts[0].update_attributes(:title => 'タイトル1')
-        @posts[1].update_attributes(:title => 'タイトル2')
-        @posts[2].update_attributes(:title => 'タイトル3')
+        @posts[0].update(:title => 'タイトル1')
+        @posts[1].update(:title => 'タイトル2')
+        @posts[2].update(:title => 'タイトル3')
       end
     end
 
@@ -478,8 +499,8 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
 
     it 'returns translations in fallback locales' do
       post = Post.create(:title => 'a title')
-      Globalize.with_locale(:ja) { post.update_attributes :title => 'タイトル' }
-      Globalize.with_locale(:fr) { post.update_attributes :title => 'titre' }
+      Globalize.with_locale(:ja) { post.update :title => 'タイトル' }
+      Globalize.with_locale(:fr) { post.update :title => 'titre' }
 
       # where
       assert_equal post, Post.where(:title => 'タイトル').first

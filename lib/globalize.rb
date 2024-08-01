@@ -66,6 +66,14 @@ module Globalize
       ::ActiveRecord.version >= Gem::Version.new('5.2.0')
     end
 
+    def rails_6?
+      ::ActiveRecord.version >= Gem::Version.new('6.0.0')
+    end
+
+    def rails_61?
+      ::ActiveRecord.version >= Gem::Version.new('6.1.0')
+    end
+
   protected
 
     def read_locale
