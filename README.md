@@ -1,6 +1,6 @@
 ![Globalize](http://globalize.github.io/globalize/images/globalize.png)
 
-[![Build Status](https://travis-ci.org/globalize/globalize.svg?branch=master)](https://travis-ci.org/globalize/globalize) [![Code Climate](https://codeclimate.com/github/globalize/globalize.svg)](https://codeclimate.com/github/globalize/globalize)
+[![Build Status](https://github.com/globalize/globalize/workflows/CI/badge.svg)](https://github.com/globalize/globalize/actions) [![Code Climate](https://codeclimate.com/github/globalize/globalize.svg)](https://codeclimate.com/github/globalize/globalize)
 [![Open Source Helpers](https://www.codetriage.com/globalize/globalize/badges/users.svg)](https://www.codetriage.com/globalize/globalize)
 
 You can chat with us using Gitter:
@@ -11,6 +11,11 @@ Globalize builds on the [I18n API in Ruby on Rails](http://guides.rubyonrails.or
 to add model translations to ActiveRecord models.
 
 In other words, a way to translate actual user-generated content, for example; a single blog post with multiple translations.
+
+## Current state of the gem
+
+Globalize is not very actively maintained. Pull Requests are welcome, especially for compatibility with new versions of Rails, but none of the maintainers actively use Globalize anymore. If you need a more actively maintained model translation gem, we recommend checking out [Mobility](https://github.com/shioyama/mobility), a natural successor of Globalize created by Chris Salzberg (one of Globalize maintainers) and inspired by the ideas discussed around Globalize. For a more up-to-date discussion of the current situation, see [issue #753](https://github.com/globalize/globalize/issues/753).
+
 
 ## Requirements
 
@@ -28,7 +33,7 @@ gem install globalize
 When using bundler put this in your Gemfile:
 
 ```ruby
-gem 'globalize', '~> 5.1.0'
+gem 'globalize', '~> 5.3.0'
 ```
 
 Please help us by letting us know what works, and what doesn't, when using pre-release code.
