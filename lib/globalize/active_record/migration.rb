@@ -89,13 +89,27 @@ module Globalize
           end
         end
 
-        def add_translation_fields
-          connection.change_table(translations_table_name) do |t|
-            fields.each do |name, options|
-              if options.is_a? Hash
-                t.column name, options.delete(:type), options
-              else
-                t.column name, options
+        if Globalize.rails_6?
+          def add_translation_fields
+            connection.change_table(translations_table_name) do |t|
+              fields.each do |name, options|
+                if options.is_a? Hash
+                  t.column name, options.delete(:type), **options
+                else
+                  t.column name, options
+                end
+              end
+            end
+          end
+        else
+          def add_translation_fields
+            connection.change_table(translations_table_name) do |t|
+              fields.each do |name, options|
+                if options.is_a? Hash
+                  t.column name, options.delete(:type), options
+                else
+                  t.column name, options
+                end
               end
             end
           end
@@ -155,6 +169,8 @@ module Globalize
             # Create a hash containing the translated column names and their values.
             translated_attribute_names.inject(fields_to_update={}) do |f, name|
               f.update({name.to_sym => translated_record[name.to_s]})
+              # Remove attributes that will no longer be translated
+              translated_attribute_names.delete(name)
             end
 
             # Now, update the actual model's record with the hash.
