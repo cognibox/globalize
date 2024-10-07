@@ -20,6 +20,7 @@ module Globalize
 
   CURRENT_RUBY     = Gem::Version.new(RUBY_VERSION)
   RUBY_VERSION_27  = Gem::Version.new('2.7.0')
+  RUBY_VERSION_31  = Gem::Version.new('3.1.6')
 
   class << self
     def locale
@@ -70,6 +71,10 @@ module Globalize
 
     def ruby_27?
       CURRENT_RUBY >= RUBY_VERSION_27
+    end
+
+    def ruby_31?
+      CURRENT_RUBY >= RUBY_VERSION_31
     end
 
     def rails_42?
