@@ -147,7 +147,22 @@ module Globalize
         Globalize.fallbacks(locale)
       end
 
-      if Globalize.ruby_27?
+      if Globalize.ruby_31?
+        class_eval <<~RUBY, __FILE__, __LINE__ + 1
+          def save(*args, **kwargs)
+            result = Globalize.with_locale(translation.locale || I18n.default_locale) do
+              without_fallbacks do
+                super(*args, **kwargs)
+              end
+            end
+            if result
+              globalize.clear_dirty
+            end
+
+            result
+          end
+        RUBY
+      elsif Globalize.ruby_27?
         class_eval <<~RUBY, __FILE__, __LINE__ + 1
           def save(...)
             result = Globalize.with_locale(translation.locale || I18n.default_locale) do
