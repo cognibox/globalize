@@ -1,13 +1,13 @@
 # Activate the gem you are reporting the issue against.
-gem 'activerecord', '4.2.0'
-gem 'globalize', '5.0.1'
+gem 'activerecord', '7.0.0'
+gem 'globalize', '7.0.0'
 require 'active_record'
 require 'globalize'
 require 'minitest/autorun'
 require 'logger'
 
 # Ensure backward compatibility with Minitest 4
-Minitest::Test = MiniTest::Unit::TestCase unless defined?(Minitest::Test)
+Minitest::Test = Minitest::Unit::TestCase unless defined?(Minitest::Test)
 
 # This connection will do for database-independent bug reports.
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')

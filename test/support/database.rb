@@ -58,7 +58,7 @@ module Globalize
         when "mysql"
           "mysql -u #{db_config['username']} --password=#{db_config['password']} --protocol tcp -e 'create database #{db_config['database']} character set utf8 collate utf8_general_ci;' >/dev/null"
         when "postgres", "postgresql"
-          "psql -c 'create database #{db_config['database']};' -U #{db_config['username']} -h localhost >/dev/null"
+          "PGPASSWORD=#{db_config['password']} psql -c 'create database #{db_config['database']};' -U #{db_config['username']} -h #{db_config['host']} -p #{db_config['port']} >/dev/null"
         end
 
         puts command
@@ -72,7 +72,7 @@ module Globalize
         when "mysql"
           "mysql -u #{db_config['username']} --password=#{db_config['password']} --protocol tcp -e 'drop database #{db_config["database"]};' >/dev/null"
         when "postgres", "postgresql"
-          "psql -c 'drop database #{db_config['database']};' -U #{db_config['username']} -h localhost >/dev/null"
+          "PGPASSWORD=#{db_config['password']} psql -c 'drop database #{db_config['database']};' -U #{db_config['username']} -h #{db_config['host']} -p #{db_config['port']} >/dev/null"
         end
 
         puts command
@@ -104,9 +104,11 @@ module Globalize
         postgres?
       end
 
-      # PostgreSQL and MySql doen't support table names longer than 63 chars
+      # PostgreSQL and MySQL doesn't support table names longer than 63 chars
+      # rails 7.1 enforce limit on table names with all databases
+      # ref: https://github.com/rails/rails/pull/45136
       def long_table_name_support?
-        sqlite?
+        sqlite? && Gem::Version.new(::ActiveRecord.gem_version) < Gem::Version.new('7.1.0')
       end
 
       def cleaning_strategy(strategy, &block)

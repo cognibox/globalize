@@ -1,5 +1,28 @@
 # Globalize Changelog
 
+## 7.0.0 (2024-12-20)
+
+* Enable Rubygems Trusted Publishing
+* Fix ActiveRecord load order issues using `ActiveSupport.on_load(:active_record)` [#816](https://github.com/globalize/globalize/pull/816) by [Rune Philosof](https://github.com/runephilosof-abtion)
+* Allow custom `:dependent` option for translations association [#821](https://github.com/globalize/globalize/pull/821) by [Bruno Carvalho](https://github.com/brunodccarvalho)
+* Don't specify `ignored_columns` unless necessary [#806](https://github.com/globalize/globalize/pull/806) by [Pat Leamon](https://github.com/stiak)
+
+## 6.3.0 (2023-10-22)
+
+* Support ruby 3.2 rails 7.1 [#810](https://github.com/globalize/globalize/pull/810) by [Shinichi Maeshima](https://github.com/willnet)
+
+## 6.2.1 (2022-05-24)
+
+*  Changed serialize method in Rails 6.1.0+ [#798](https://github.com/globalize/globalize/pull/798) by [Alex](https://github.com/oivoodoo)
+
+## 6.2.0 (2022-05-24)
+
+* Fix asset precompile in docker build workflow [#799](https://github.com/globalize/globalize/pull/799) by [Diefferson Koderer Môro](https://github.com/djpremier)
+
+## 6.1.0 (2022-02-25)
+
+* Patch ActiveSupport in Rails 7.0.0+ [#792](https://github.com/globalize/globalize/pull/792) by [Daniel Chan](https://github.com/mynameisdaniel) and [Artis Raugulis](https://github.com/artisr)
+
 ## 6.0.1 (2021-06-23)
 
 * Fix errors with Rails 6.1 and Ruby 3.0 [#778](https://github.com/globalize/globalize/pull/778) by [Andrew White](https://github.com/pixeltrix)

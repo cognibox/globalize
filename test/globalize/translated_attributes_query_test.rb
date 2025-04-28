@@ -1,7 +1,7 @@
 # encoding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
-class TranslatedAttributesQueryTest < MiniTest::Spec
+class TranslatedAttributesQueryTest < Minitest::Spec
   def self.it_supports_translated_conditions(method)
     it 'finds records with matching attribute value in translations table' do
       post = Post.create(:title => 'title 1')
@@ -183,16 +183,11 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
       it 'returns only selected attributes' do
         @rel = Post.send(method, :title)
 
-        if Globalize.rails_61?
-          # Rails 6.1 and later quote the translated column name
-          case Globalize::Test::Database.driver
-          when 'mysql'
-            assert_match(/`post_translations`.`title`/, @rel.to_sql)
-          else
-            assert_match(/"post_translations"."title"/, @rel.to_sql)
-          end
+        case Globalize::Test::Database.driver
+        when 'mysql'
+          assert_match(/`post_translations`.`title`/, @rel.to_sql)
         else
-          assert_match(/post_translations.title/, @rel.to_sql)
+          assert_match(/"post_translations"."title"/, @rel.to_sql)
         end
       end
 
@@ -235,21 +230,11 @@ class TranslatedAttributesQueryTest < MiniTest::Spec
       it 'returns only selected attributes' do
         @rel = Post.send(method, :title, :id)
 
-        if Globalize.rails_61?
-          # Rails 6.1 and later quote the translated column name
-          case Globalize::Test::Database.driver
-          when 'mysql'
-            assert_match(/`post_translations`.`title`, `posts`.`id`/, @rel.to_sql)
-          else
-            assert_match(/"post_translations"."title", "posts"."id"/, @rel.to_sql)
-          end
+        case Globalize::Test::Database.driver
+        when 'mysql'
+          assert_match(/`post_translations`.`title`, `posts`.`id`/, @rel.to_sql)
         else
-          case Globalize::Test::Database.driver
-          when 'mysql'
-            assert_match(/post_translations.title, `posts`.`id`/, @rel.to_sql)
-          else
-            assert_match(/post_translations.title, "posts"."id"/, @rel.to_sql)
-          end
+          assert_match(/"post_translations"."title", "posts"."id"/, @rel.to_sql)
         end
       end
 
